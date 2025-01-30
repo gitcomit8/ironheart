@@ -5,10 +5,9 @@ edition = "2021"
 
 [dependencies]
 uefi = "0.33.0"
-bootloader = "0.11.9"
-uefi-services = "0.25.0"
-spin = "0.9.8"
+uefi-raw = "0.9.0"
 x86_64 = "0.15.2"
+
 
 [profile.dev]
 panic = "abort"
