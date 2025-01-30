@@ -1,31 +1,19 @@
-ENTRY(_start)             /* Entry point symbol (matches your assembly/Rust code) */
+ENTRY(efi_main) //Entry point of the program
 
-SECTIONS {
-    . = 0x100000;         /* Load address (1MB mark, common for BIOS bootloaders) */
+SECTIONS
+{
+    .text : { *(.text) } > ROM  //.text is the executable code
+    .rodata : { *(.rodata) } > ROM //.rodata is the read-only data eg. strings,constatnts
+    .data : { *(.data) } > RAM //.data is the initialized global data
+    .bss : { *(.bss) } > RAM //.bss is the uninitialized global data filled with zeros
+    .efi_runtime : { *(.efi_runtime) } > RAM //.efi_runtime is the runtime data that is used by the EFI firmware
 
-    .text : {
-        *(.text .text.*)  /* All .text sections from input files */
-        . = ALIGN(4K);    /* Align to 4KB boundary (useful for paging later) */
-    }
+    /DISCARD/ : {*(.eh_frame)} // Discard the exception handling section
+}
 
-    .rodata : {
-        *(.rodata .rodata.*)
-        . = ALIGN(4K);
-    }
-
-    .data : {
-        *(.data .data.*)
-        . = ALIGN(4K);
-    }
-
-    .bss : {
-        *(COMMON)         /* Common symbols (uninitialized globals) */
-        *(.bss .bss.*)
-        . = ALIGN(4K);
-    }
-
-    /DISCARD/ : {         /* Discard unnecessary sections */
-        *(.comment)
-        *(.eh_frame)      /* Rust/C++ exception handling (not needed in no_std) */
-    }
+MEMORY
+{
+    RAM (rwx) : ORIGIN = 0x300000, LENGTH = 0x100000  // RAM region is of size 1MB starting from 0x300000
+    ROM (rx) : ORIGIN = 0x200000, LENGTH = 0x100000   // ROM region is of size 1MB starting from 0x200000
+                                                      // ROM starts from 0x200000 because of the UEFI firmware reserved space
 }
