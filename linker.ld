@@ -13,5 +13,5 @@ SECTIONS
 
 MEMORY
 {
-    RAM (rwx) : ORIGIN = 0x300000, LENGTH = 0x100000  /* RAM region is of size 3MB starting from 0x300000*/
+    RAM (rwx) : ORIGIN = 0x1000000, LENGTH = 0x300000  /* RAM region is of size 16MB starting from 0x1000000*/
 }
