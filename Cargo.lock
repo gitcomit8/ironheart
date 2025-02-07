@@ -25,7 +25,6 @@ name = "ironheart"
 version = "0.1.0"
 dependencies = [
  "uefi",
- "uefi-raw",
  "x86_64",
 ]
 
